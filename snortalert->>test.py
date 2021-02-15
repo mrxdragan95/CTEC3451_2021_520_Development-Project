@@ -1,4 +1,4 @@
-mport os, glob
+import os, glob
 
 file_path = "/tmp/test/"
 test = os.path.dirname(file_path)
