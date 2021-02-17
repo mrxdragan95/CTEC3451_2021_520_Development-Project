@@ -16,7 +16,7 @@ for file in glob.glob("/tmp/test/*"):
 else:
   print("The file does not exist")
 
-os.system('sudo chmod 777 test.txt')
+os.system('sudo chmod 777 /test/test.txt')
 os.system('grep -n 10000 /var/log/snort/alert > /test/test.txt')
 os.system('cat /var/log/snort/alert > /test/testfull.txt')
 print("Done!")
