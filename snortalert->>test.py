@@ -1,5 +1,6 @@
 import os, glob
 
+os.system('touch test.txt')
 file_path = "/tmp/test/"
 test = os.path.dirname(file_path)
 
@@ -15,6 +16,7 @@ for file in glob.glob("/tmp/test/*"):
 else:
   print("The file does not exist")
 
-os.system('grep -n 10000 /var/log/snort/alert > /tmp/test/test.txt')
-os.system('cat /var/log/snort/alert > /tmp/test/testfull.txt')
+os.system('sudo chmod 777 test.txt')
+os.system('grep -n 10000 /var/log/snort/alert > /test/test.txt')
+os.system('cat /var/log/snort/alert > /test/testfull.txt')
 print("Done!")
