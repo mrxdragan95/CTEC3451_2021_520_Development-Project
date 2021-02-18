@@ -8,7 +8,7 @@ def run_tshark_on_local_machine():
     interface_name = "eth0"
     curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     capture_file_name = "/guyCapture_interface_" + interface_name + "_" + curr_time + ".pcap"
-    num_sec_to_sleep = 120
+    num_sec_to_sleep = 280
     print(func_name + "about to create capture with name:" + capture_file_name)
     p = subprocess.Popen(["tshark",
                           "-i", interface_name,
