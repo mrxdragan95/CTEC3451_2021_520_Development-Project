@@ -12,7 +12,7 @@ def run_tshark_on_local_machine(curr_time):
     print(func_name + "start")
     interface_name = "eth0"
     capture_file_name = "/tmp/Capture_interface_" + interface_name + "_" + curr_time + ".pcap"
-    num_sec_to_sleep = 290
+    num_sec_to_sleep = 10
     print(func_name + "about to create capture with name:" + capture_file_name)
     p = subprocess.Popen(["tshark",
                           "-i", interface_name,
@@ -63,6 +63,27 @@ def snortlog_to_txt(curr_time):
     #os.chmod(file_cat, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
     #shutil.copy('/var/log/snort/alert', cat_line)
 
+def barnyard2_to_csv(curr_time):
+    func_name = "run_barnyard2 - "
+    print(func_name + "start")
+    barnyard2_conf = "/etc/snort/barnyard2.conf"
+    snortlog = "/var/log/snort"
+    snort_u2 = "snort.u2"
+    barnyard2_waldo = "/var/log/snort/barnyard2.waldo"
+    num_sec_to_sleep = 100
+    a = subprocess.Popen(["barnyard2", 
+                          "-c", barnyard2_conf, "-d",
+			  snortlog, "-f",
+			  barnyard2_waldo, 
+			  "-g", "snort", "-u", "snort"],
+                          stdout=subprocess.PIPE)
+    time.sleep(num_sec_to_sleep)
+    a.terminate()
+
+    file_csv = "/tmp/snortlog" + curr_time + "/snort.csv"
+    file = open(file_csv, "w")
+    file.close()
+    shutil.copy('/var/log/snort/csv.out', file_csv)
     print("Done!")
 
 
@@ -71,4 +92,5 @@ os.system('systemctl stop snort')
 run_tshark_on_local_machine(curr_time)
 run_snort(curr_time)
 snortlog_to_txt(curr_time)
+barnyard2_to_csv(curr_time)
 print("Done")
