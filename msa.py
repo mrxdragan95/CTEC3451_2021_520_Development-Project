@@ -10,12 +10,12 @@ import socket
 import threading, time
 from termcolor import colored
 
-#-------------------------------------------------FPing---------------------------------------#
+#-------------------------------------------------FPing---------------------------------------------------------------#
 
 os.system('ping 192.168.253.136 -c 15')
 print("pfing Done!")
 
-#-------------------------------------------------SSH-Brute-Force-----------------------------#
+#-------------------------------------------------SSH-Brute-Force-----------------------------------------------------#
 
 #By SxNade
 #importing the required libraries
@@ -72,12 +72,12 @@ with open(password_file, 'r') as file:
     #Lowering this time value may cause some errors......!
 
 print("Brute-Force-SHH_Completed")
-#-------------------------------------------------NSE-port-scan-----------------------------#
+#-------------------------------------------------NSE-port-scan----------------------------------------------------#
 
 os.system('nmap -sV 192.168.253.136')
 print("NSE Done!")
 
-#-------------------------------------------------NSE-vulnerability-scan--------------------#
+#-------------------------------------------------NSE-vulnerability-scan-------------------------------------------#
 
 def vulscan():
     os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
