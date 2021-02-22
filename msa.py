@@ -8,7 +8,6 @@ import paramiko
 import sys
 import socket
 import threading, time
-import nmap
 from termcolor import colored
 
 #-------------------------------------------------FPing---------------------------------------#
@@ -72,6 +71,7 @@ with open(password_file, 'r') as file:
     #time in seconds between each successive thread//Don't change it unless very neccessary...!
     #Lowering this time value may cause some errors......!
 
+print("Brute-Force-SHH_Completed")
 #-------------------------------------------------NSE-port-scan-----------------------------#
 
 os.system('nmap -sV 192.168.253.136')
@@ -79,7 +79,14 @@ print("NSE Done!")
 
 #-------------------------------------------------NSE-vulnerability-scan--------------------#
 
+def vulscan():
+    os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
+    print("Moving_to_Script-Vulscan.nse")
+
+vulscan()
 os.system('nmap -sV --script=vulscan/vulscan.nse 192.168.253.136')
+
 print("NSE vulnerability Done!")
 
 print("Completed")
+
