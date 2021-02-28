@@ -1,3 +1,5 @@
+#First implementation - Dragan Butkovic -P2408503
+
 #1. fping
 #2. SSH-Brute-Force
 #3. NSE ports scan
