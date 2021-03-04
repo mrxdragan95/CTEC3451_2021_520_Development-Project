@@ -1,4 +1,4 @@
-import subprocess
+import subprocess 
 import time
 import os
 import stat
@@ -6,6 +6,12 @@ import sys
 import os.path
 import shutil
 from datetime import datetime
+from subprocess import Popen, PIPE, STDOUT
+
+def clean_alert():
+    print("Clean alert")
+    os.system('cp /dev/null /var/log/snort/alert')
+    os.system('rm -rf /var/log/snort/tcpdump.log*')
 
 def new_folder_log(curr_time):
     func_name = "New folder to /tmp/snortlog"
@@ -26,7 +32,7 @@ def run_tshark_on_local_machine(curr_time):
     print(func_name + "start")
     interface_name = "eth0"
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
-    num_sec_to_sleep = 90
+    num_sec_to_sleep = 115
     print(func_name + "about to create capture with name:" + capture_file_name)
     p = subprocess.Popen(["tshark",
                           "-i", interface_name,
@@ -44,53 +50,43 @@ def run_snort(curr_time):
     snortlog = "/var/log/snort"
     snortconf = "/etc/snort/snort.conf"
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
-    num_sec_to_sleep = 20
-    s = subprocess.Popen(["snort", 
+    num_sec_to_sleep = 15
+    snort = subprocess.Popen(["snort", 
                           "-l", snortlog, "-c",
 			  snortconf, "-r",
-			  capture_file_name, 
-			  "-A", "full"],
+			  capture_file_name,
+			  "-A", "fast"],
                           stdout=subprocess.PIPE)
     time.sleep(num_sec_to_sleep)
-    s.terminate()
+    snort.terminate()
 
 def snortlog_to_txt(curr_time):
-
     file_line = "/tmp/snortlog" + curr_time + "/snortlog_line.txt"
     file = open(file_line, "w")
+    num_sec_to_sleep = 3
     file.close()
     os.chmod(file_line, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)   
     shutil.copy('/var/log/snort/alert', file_line)
-
-def barnyard2_to_csv(curr_time):
-    func_name = "run_barnyard2 - "
-    print(func_name + "start")
-    barnyard2_conf = "/etc/snort/barnyard2.conf"
-    snortlog = "/var/log/snort"
-    snort_u2 = "snort.u2"
-    barnyard2_waldo = "/var/log/snort/barnyard2.waldo"
-    num_sec_to_sleep = 100
-    a = subprocess.Popen(["barnyard2", 
-                          "-c", barnyard2_conf, "-d",
-			  snortlog, "-f",
-			  barnyard2_waldo, 
-			  "-g", "snort", "-u", "snort"],
-                          stdout=subprocess.PIPE)
     time.sleep(num_sec_to_sleep)
-    a.terminate()
 
-    file_csv = "/tmp/snortlog" + curr_time + "/snort.csv"
-    file = open(file_csv, "w")
-    file.close()
-    shutil.copy('/var/log/snort/csv.out', file_csv)
-    print("Done!")
+def snortlog_to_pcap(curr_time):   
+    reading_output = "/var/log/snort/tcpdump.log.*"
+    capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "snort_pcap_">
+    num_sec_to_sleep = 3
+    tcpdump = subprocess.Popen(["tshark", "-r", reading_output,
+                                    "-w", capture_file_pcap],
+                                    stdout=subprocess.PIPE)
+    time.sleep(num_sec_to_sleep)
+    tcpdump.terminate()
 
+                        
 
+clean_alert()
 curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 os.system('systemctl stop snort')
 new_folder_log(curr_time)
 run_tshark_on_local_machine(curr_time)
 run_snort(curr_time)
 snortlog_to_txt(curr_time)
-barnyard2_to_csv(curr_time)
+snortlog_to_pcap(curr_time)
 print("Done")
