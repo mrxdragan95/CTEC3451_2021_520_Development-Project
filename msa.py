@@ -29,9 +29,6 @@ print("pfing Done!")
 
 #-------------------------------------------------SSH-Brute-Force-----------------------------------------------------#
 
-#By SxNade
-#importing the required libraries
-
 exit_tag = 0
 #setting the initial value to 0
 
