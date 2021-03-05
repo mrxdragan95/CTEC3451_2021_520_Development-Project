@@ -5,6 +5,7 @@ import stat
 import sys
 import os.path
 import shutil
+import glob
 from datetime import datetime
 from subprocess import Popen, PIPE, STDOUT
 
@@ -69,17 +70,20 @@ def snortlog_to_txt(curr_time):
     shutil.copy('/var/log/snort/alert', file_line)
     time.sleep(num_sec_to_sleep)
 
-def snortlog_to_pcap(curr_time):   
-    reading_output = "/var/log/snort/tcpdump.log.*"
-    capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "snort_pcap_">
-    num_sec_to_sleep = 3
-    tcpdump = subprocess.Popen(["tshark", "-r", reading_output,
+def chmod_snort():
+    for reading_logsnort in glob.glob('/var/log/snort/tcpdump.log.*'):
+        os.chmod(reading_logsnort, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+        print("Chmod tcpdump.log* is done")
+
+def snortlog_to_pcap(curr_time):
+    for reading_output in glob.glob('/var/log/snort/tcpdump.log.*'):
+        capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "Snortlog" + curr_time + ".pcap"
+        num_sec_to_sleep = 3
+        tcpdump = subprocess.Popen(["tshark", "-r", reading_output,
                                     "-w", capture_file_pcap],
                                     stdout=subprocess.PIPE)
-    time.sleep(num_sec_to_sleep)
-    tcpdump.terminate()
-
-                        
+        time.sleep(num_sec_to_sleep)
+        tcpdump.terminate()
 
 clean_alert()
 curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -88,5 +92,6 @@ new_folder_log(curr_time)
 run_tshark_on_local_machine(curr_time)
 run_snort(curr_time)
 snortlog_to_txt(curr_time)
+chmod_snort()
 snortlog_to_pcap(curr_time)
 print("Done")
