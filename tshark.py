@@ -39,64 +39,97 @@ def new_folder_log(curr_time):
 
     print("New Snort folder is completed.")
 
-# Running tshark 
+# tshark ------------------------------------------------------------------------------------------------------------------- 
 def run_tshark_on_local_machine(curr_time):
     func_name = "running_tshark_on_local_machine - "
     print(func_name + "start")
+    #
     interface_name = "eth0"
+    #Creating 
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
+    #
     num_sec_to_sleep = 115
     print(func_name + "about to create capture with name:" + capture_file_name)
+    #
     p = subprocess.Popen(["tshark",
                           "-i", interface_name,
                           "-w", capture_file_name, 
 			  "host", "192.168.253.136"],
                            stdout=subprocess.PIPE)
+    #
     time.sleep(num_sec_to_sleep)
+    #
     p.terminate()
+    #
     print(func_name + "end")
 
+# Snort --------------------------------------------------------------------------------------------------------------------
 def run_snort(curr_time):
     func_name = "running_snort - "
     print(func_name + "start")
+    #
     interface_name = "eth0"
+    #
     snortlog = "/var/log/snort"
+    #
     snortconf = "/etc/snort/snort.conf"
+    #
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
+    #
     num_sec_to_sleep = 15
+    #
     snort = subprocess.Popen(["snort", 
                           "-l", snortlog, "-c",
 			  snortconf, "-r",
 			  capture_file_name,
 			  "-A", "fast"],
                           stdout=subprocess.PIPE)
+    #
     time.sleep(num_sec_to_sleep)
+    #
     snort.terminate()
 
 def snortlog_to_txt(curr_time):
+    #
     file_line = "/tmp/snortlog" + curr_time + "/snortlog_line.txt"
+    #
     file = open(file_line, "w")
+    #
     num_sec_to_sleep = 3
     file.close()
+    #
     os.chmod(file_line, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)   
+    #
     shutil.copy('/var/log/snort/alert', file_line)
+    #
     time.sleep(num_sec_to_sleep)
 
+#
 def chmod_snort():
+    #
     for reading_logsnort in glob.glob('/var/log/snort/tcpdump.log.*'):
-        os.chmod(reading_logsnort, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+        #
+	os.chmod(reading_logsnort, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
         print("Chmod tcpdump.log* is done")
 
+#	
 def snortlog_to_pcap(curr_time):
+    #
     for reading_output in glob.glob('/var/log/snort/tcpdump.log.*'):
-        capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "Snortlog" + curr_time + ".pcap"
-        num_sec_to_sleep = 3
-        tcpdump = subprocess.Popen(["tshark", "-r", reading_output,
+        #
+	capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "Snortlog" + curr_time + ".pcap"
+        #
+	num_sec_to_sleep = 3
+        #
+	tcpdump = subprocess.Popen(["tshark", "-r", reading_output,
                                     "-w", capture_file_pcap],
                                     stdout=subprocess.PIPE)
-        time.sleep(num_sec_to_sleep)
-        tcpdump.terminate()
-
+        #
+	time.sleep(num_sec_to_sleep)
+        #
+	tcpdump.terminate()
+	
+##Cleaning the alerts	
 clean_alert()
 #Getting the current data and time (year, month, day, hour, minute and second)
 curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
@@ -106,8 +139,13 @@ os.system('systemctl stop snort')
 new_folder_log(curr_time)
 #Executing the 
 run_tshark_on_local_machine(curr_time)
+#
 run_snort(curr_time)
+#
 snortlog_to_txt(curr_time)
+#
 chmod_snort()
+#
 snortlog_to_pcap(curr_time)
+#
 print("Done")
