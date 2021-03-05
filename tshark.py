@@ -15,28 +15,33 @@ from subprocess import Popen, PIPE, STDOUT
 #Cleaning the alerts and tcpdump.logs
 def clean_alert():
     print("Clean alert")
-    #removing all the contents of alert <FILE> and staying file after recently snort output (Using cp utilies with /dev/null)
+    #Removing all the contents of alert <FILE> and staying file after recently snort output (Using cp utilies with /dev/null)
     os.system('cp /dev/null /var/log/snort/alert')
     #Deleting only tcpdump.log.xxxxxxx
     os.system('rm -rf /var/log/snort/tcpdump.log*')
 
-
-def new_folder_log(curr_time):
-    func_name = "New folder to /tmp/snortlog"
-    print(func_name)
+#Creating a directory with current time
+def new_folder_log(curr_time): 
+    #printing path where putting a new directory
+    snort_folder_name = "New folder to /tmp/snortlog"
+    print(snort_folder_name)
+    #Finding the file's aboslute path relative to the current working directory with date
     file_path = "/tmp/snortlog" + curr_time + "/"
+    #Returning the snort directory of snort folder 
     snortfile = os.path.dirname(file_path)
 
     try:
+	# performing a stat system call on the given path
         os.stat(snortfile)
     except:
+	# Creating a directory named path with numeric mode.
         os.mkdir(snortfile)
 
-    print("New folder is done")
+    print("New Snort folder is completed.")
 
-
+# Running tshark 
 def run_tshark_on_local_machine(curr_time):
-    func_name = "run_tshark_on_local_machine - "
+    func_name = "running_tshark_on_local_machine - "
     print(func_name + "start")
     interface_name = "eth0"
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
@@ -52,7 +57,7 @@ def run_tshark_on_local_machine(curr_time):
     print(func_name + "end")
 
 def run_snort(curr_time):
-    func_name = "run_snort - "
+    func_name = "running_snort - "
     print(func_name + "start")
     interface_name = "eth0"
     snortlog = "/var/log/snort"
@@ -93,9 +98,13 @@ def snortlog_to_pcap(curr_time):
         tcpdump.terminate()
 
 clean_alert()
+#Getting the current data and time (year, month, day, hour, minute and second)
 curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+#Executing the stopping running snort service in the background when only tshark runs 
 os.system('systemctl stop snort')
+#Creating a directory with current time
 new_folder_log(curr_time)
+#Executing the 
 run_tshark_on_local_machine(curr_time)
 run_snort(curr_time)
 snortlog_to_txt(curr_time)
