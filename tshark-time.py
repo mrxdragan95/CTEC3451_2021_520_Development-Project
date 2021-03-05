@@ -1,3 +1,6 @@
+
+
+
 import subprocess 
 import time
 import os
@@ -9,10 +12,14 @@ import glob
 from datetime import datetime
 from subprocess import Popen, PIPE, STDOUT
 
+#Cleaning the alerts and tcpdump.logs
 def clean_alert():
     print("Clean alert")
+    #removing all the contents of alert <FILE> and staying file after recently snort output (Using cp utilies with /dev/null)
     os.system('cp /dev/null /var/log/snort/alert')
+    #Deleting only tcpdump.log.xxxxxxx
     os.system('rm -rf /var/log/snort/tcpdump.log*')
+
 
 def new_folder_log(curr_time):
     func_name = "New folder to /tmp/snortlog"
