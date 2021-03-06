@@ -12,7 +12,7 @@ import glob
 from datetime import datetime
 from subprocess import Popen, PIPE, STDOUT
 
-#Cleaning the alerts and tcpdump.logs
+#Cleaning the alerts and tcpdump.logs function -------------------------------------------------------------------------------------
 def clean_alert():
     print("Clean alert")
     #Removing all the contents of alert <FILE> and staying file after recently snort output (Using cp utilies with /dev/null)
@@ -20,12 +20,12 @@ def clean_alert():
     #Deleting only tcpdump.log.xxxxxxx
     os.system('rm -rf /var/log/snort/tcpdump.log*')
 
-#Creating a directory with current time
+#Creating a directory with current time function -----------------------------------------------------------------------------------
 def new_folder_log(curr_time): 
     #printing path where putting a new directory
     snort_folder_name = "New folder to /tmp/snortlog"
     print(snort_folder_name)
-    #Finding the file's aboslute path relative to the current working directory with date
+    #Finding the file's aboslute path relative to the current working directory with current date
     file_path = "/tmp/snortlog" + curr_time + "/"
     #Returning the snort directory of snort folder 
     snortfile = os.path.dirname(file_path)
@@ -39,36 +39,34 @@ def new_folder_log(curr_time):
 
     print("New Snort folder is completed.")
 
-# tshark ------------------------------------------------------------------------------------------------------------------- 
+# tshark function------------------------------------------------------------------------------------------------------------------- 
 def run_tshark_on_local_machine(curr_time):
-    func_name = "running_tshark_on_local_machine - "
+    func_name = "tshark_on_local_machine - "
     print(func_name + "start")
-    #
+    #interface (eth0/wlan0/eth1) name on machine network
     interface_name = "eth0"
-    #Creating 
+    #Creating a new packet capture (.pcap) before starting tshark
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
-    #
+    #Waiting for 115 seconds while tshark running
     num_sec_to_sleep = 115
     print(func_name + "about to create capture with name:" + capture_file_name)
-    #
+    #Executing the tshark with host on packet capture 
     p = subprocess.Popen(["tshark",
                           "-i", interface_name,
                           "-w", capture_file_name, 
 			  "host", "192.168.253.136"],
                            stdout=subprocess.PIPE)
-    #
+    #Stopping tshark in time.sleep
     time.sleep(num_sec_to_sleep)
-    #
+    #Exiting the program successfully Or Stopping a running python and save packet capture
     p.terminate()
-    #
+    #printing the end tshark 
     print(func_name + "end")
 
-# Snort --------------------------------------------------------------------------------------------------------------------
+# Snort Function--------------------------------------------------------------------------------------------------------------------
 def run_snort(curr_time):
-    func_name = "running_snort - "
+    func_name = "Snort - "
     print(func_name + "start")
-    #
-    interface_name = "eth0"
     #
     snortlog = "/var/log/snort"
     #
