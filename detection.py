@@ -1,11 +1,10 @@
-#Second implementation - Dragan Butkovic -P2408503
+# Detection implementation script - Dragan Butkovic -P2408503
 
-# IMPORTANT NOTE: Install Python PIP on Linux for a package management systems that simplifies installation 
-# and mangement of software packages written in Python such as those found in the Python pacakage index (PyPI). 
-# Pip is not installed by default on Ubuntu 18.04, but the installation is pretty straightforward.
+# In Linux PIP is install from Python Package Index(PyPI). The PIP command 
+# can be set up with the package manager for user’s distribution. 
 
-# SHOULD INSTALL PIP and PIP PACKAGES 
 # sudo apt install python3-pip
+
 
 
 import subprocess 
@@ -22,17 +21,17 @@ from subprocess import Popen, PIPE, STDOUT
 #Cleaning the alerts and tcpdump.logs function -------------------------------------------------------------------------------------
 def clean_alert():
     print("Clean alert")
-    #Removing all the contents of alert <FILE> and staying file after recently snort output (Using cp utilies with /dev/null)
+    #Eliminating all the contents of alert <FILE> and staying file after recently added snort output (Using cp utilises with /dev/null)
     os.system('cp /dev/null /var/log/snort/alert')
     #Deleting only tcpdump.log.xxxxxxx
     os.system('rm -rf /var/log/snort/tcpdump.log*')
 
 #Creating a directory with current time function -----------------------------------------------------------------------------------
 def new_folder_log(curr_time): 
-    #printing path where putting a new directory
+    #printing path for placing a new directory
     snort_folder_name = "New folder to /tmp/snortlog"
     print(snort_folder_name)
-    #Finding the file's aboslute path relative to the current working directory with current date
+    #Finding the file's definite path related to the current working directory with current date
     file_path = "/tmp/snortlog" + curr_time + "/"
     #Returning the snort directory of snort folder 
     snortfile = os.path.dirname(file_path)
@@ -52,7 +51,7 @@ def run_tshark_on_local_machine(curr_time):
     print(func_name + "start")
     #interface (eth0/wlan0/eth1) name on machine network
     interface_name = "eth0"
-    #Creating a new packet capture (.pcap) before starting tshark
+    #Creating a new packet capture (.pcap) before initiating  tshark
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
     #Waiting for 115 seconds while tshark running
     num_sec_to_sleep = 115
@@ -65,8 +64,7 @@ def run_tshark_on_local_machine(curr_time):
                            stdout=subprocess.PIPE)
     #Stopping tshark in time.sleep
     time.sleep(num_sec_to_sleep)
-    #Exiting the program successfully Or Stopping a running python and save packet capture
-    p.terminate()
+    #Exiting the program successfully or Stopping running python and save packet capture
     #printing the end tshark 
     print(func_name + "end")
 
@@ -78,9 +76,9 @@ def run_snort(curr_time):
     snortlog = "/var/log/snort"
     #Reading the variety of Snort configuration options that can be set 
     snortconf = "/etc/snort/snort.conf"
-    #Reading a new packet capture from tshark with curr_time
+    #Reading a new packet capture from tshark with current time
     capture_file_name = "/tmp/snortlog" + curr_time + "/" "Capture_" + interface_name + "_" + curr_time + ".pcap"
-    #Waiting for 115 seconds while snort running
+    #Waiting for 15 seconds while snort running
     num_sec_to_sleep = 15
     #Executing the snort with packet capture and putting into the snort.log and alert
     snort = subprocess.Popen(["snort", 
@@ -91,7 +89,7 @@ def run_snort(curr_time):
                           stdout=subprocess.PIPE)
     #Stopping snort in time.sleep
     time.sleep(num_sec_to_sleep)
-    #Exiting the program successfully Or Stopping a running python and creating log
+    #Exiting the program successfully or Stopping running python and creating log
     snort.terminate()
     print(func_name + "end")
 
@@ -113,7 +111,7 @@ def snortlog_to_txt(curr_time):
 
 # chmod 777 text Function-----------------------------------------------------------------------------------------------------------
 def chmod_snort():
-    #finding the absolute path of the .log* files in the Desktop directory
+    #finding the absolute path of the .log* files in the snort directory
     for reading_logsnort in glob.glob('/var/log/snort/tcpdump.log.*'):
         #changing chmod() the mode of path to the passed numeric mode such as Read, write, and execute by owner, group, and others.  
         #sudo chmod 777 snortlog.txt 
@@ -122,7 +120,7 @@ def chmod_snort():
 
 # tcpdump.log to new packet capture Function---------------------------------------------------------------------------------------- 	
 def snortlog_to_pcap(curr_time):
-    #finding the absolute path of the .log* files in the Desktop directory 
+    #finding the absolute path of the .log* files in the snort directory 
     for reading_output in glob.glob('/var/log/snort/tcpdump.log.*'):
         #Creating a new packet capture from snort output
 	capture_file_pcap = "/tmp/snortlog" + curr_time + "/" "Snortlog" + curr_time + ".pcap"
@@ -137,7 +135,7 @@ def snortlog_to_pcap(curr_time):
         #Exiting the program successfully
 	tcpdump.terminate()
 	
-##Cleaning the alerts	
+#Cleaning the alerts	
 clean_alert()
 #Getting the current data and time (year, month, day, hour, minute and second)
 curr_time = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
