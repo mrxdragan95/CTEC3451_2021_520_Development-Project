@@ -1,4 +1,11 @@
+#Second implementation - Dragan Butkovic -P2408503
 
+# IMPORTANT NOTE: Install Python PIP on Linux for a package management systems that simplifies installation 
+# and mangement of software packages written in Python such as those found in the Python pacakage index (PyPI). 
+# Pip is not installed by default on Ubuntu 18.04, but the installation is pretty straightforward.
+
+# SHOULD INSTALL PIP and PIP PACKAGES 
+# sudo apt install python3-pip
 
 
 import subprocess 
