@@ -28,6 +28,27 @@ from termcolor import colored
 os.system('ping 192.168.253.136 -c 15')
 print("pfing Done!")
 
+
+#-------------------------------------------------NSE-port-scan----------------------------------------------------#
+
+#Executing Nmap script to scan for Open ports from the host
+os.system('nmap -sV 192.168.253.136')
+print("NSE Done!")
+
+#-------------------------------------------------NSE-vulnerability-scan-------------------------------------------#
+
+#Installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
+def vulscan():
+    os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
+    print("Moving_to_Script-Vulscan.nse")
+
+    
+vulscan()
+#Executing Nmap vulnerability scan using NSE scripts from the host  
+os.system('nmap -sV --script=vulscan/vulscan.nse 192.168.253.136')
+
+print("NSE vulnerability Done!")
+
 #-------------------------------------------------SSH-Brute-Force-----------------------------------------------------#
 
 exit_tag = 0
@@ -82,25 +103,6 @@ with open(password_file, 'r') as file:
     #Lowering this time value might cause some faults......!
 
 print("Brute-Force-SHH_Completed")
-#-------------------------------------------------NSE-port-scan----------------------------------------------------#
-
-#Executing Nmap script to scan for Open ports from the host
-os.system('nmap -sV 192.168.253.136')
-print("NSE Done!")
-
-#-------------------------------------------------NSE-vulnerability-scan-------------------------------------------#
-
-#Installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
-def vulscan():
-    os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
-    print("Moving_to_Script-Vulscan.nse")
-
-    
-vulscan()
-#Executing Nmap vulnerability scan using NSE scripts from the host  
-os.system('nmap -sV --script=vulscan/vulscan.nse 192.168.253.136')
-
-print("NSE vulnerability Done!")
 
 print("Completed")
 
