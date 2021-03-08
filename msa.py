@@ -11,9 +11,9 @@
 # sudo pip3 install paramiko
 
 #1. fping
-#2. SSH-Brute-Force
-#3. NSE ports scan
-#4. NSE ports vulnerability
+#2. NSE ports scan
+#3. NSE ports vulnerability
+#4. SSH-Brute-Force
 
 import os
 import paramiko
