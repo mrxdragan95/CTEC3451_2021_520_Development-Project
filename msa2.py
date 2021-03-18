@@ -43,7 +43,7 @@ exit_tag = 0
 
 print("\n\nstarting...")
 #Executing Nmap vulnerability scan using NSE scripts from the host  
-os.system('nmap -sV --script=vulscan/vulscan.nse 192.168.253.136 &')
+os.system('nmap --script vuln  192.168.253.136 &')
 os.system("notify-send Successfully initiated'")
 time.sleep(2)
 
