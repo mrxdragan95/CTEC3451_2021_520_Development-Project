@@ -29,6 +29,7 @@ print("pfing and NSE port scan Done!")
 
 #---------------------------------SSH-Brute-Force + NSE-vulnerability-scan-----------------------------------------------------#
 
+#Installing the vulscan script from git clone https://github.com/mrxdragan95/CTEC3451_2021_520_Development-Project.git
 def vulscan():
     os.system('ln -s `pwd`/vulscan /usr/share/nmap/scripts/vulscan')
     print("Moving_to_Script-Vulscan.nse")
