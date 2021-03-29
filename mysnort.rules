@@ -1,4 +1,4 @@
-2021 Dragan Butkovic P2408503
+# 2021 Dragan Butkovic P2408503
 
 alert tcp $HOME_NET 21 -> $EXTERNAL_NET any (msg:"SCAN Potential FTP Brute-Force attempt"; flow:from_server,established; content:"530 "; pcre:"/530\s+(Login|User|Failed|Not)/smi"; sid:1000003; rev:10;)
 alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:”FTP connection attempt”; sid:10001; rev:1;)
