@@ -14,5 +14,6 @@ alert tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (msg:"POLICY-OTHER Adobe Co
 alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:"FTP command overflow attempt"; flow:to_server,established,no_stream; dsize:>100; reference:bugtraq,4638; reference:cve,2002-0606; classtype:protocol-command-decode; sid:1748; rev:8;)
 alert udp any any -> $HOME_NET any (msg:"NMAP UPD Scan"; sid: 100000019; rev: 1;)
 alert tcp any any -> any 80 (content:"HTTP"; msg:"http test"; sid:10000100; rev:1;)
+alert tcp any any -> any 443 (content:"HTTPS"; msg:"https test"; sid:10000100; rev:1;)
 alert tcp any any -> $HOME_NET any (msg:"SMB Possible Echo Request (443)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024220; rev:1;)
-alert tcp any any -> $HOME_NET 139 (msg:"SMB Possible Echo Request2 (139)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024221; rev:1;)
+alert tcp any any -> $HOME_NET 139 (msg:"SMB Possible Echo Request (139)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024221; rev:1;)
