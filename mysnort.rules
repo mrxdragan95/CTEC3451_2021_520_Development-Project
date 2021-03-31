@@ -3,17 +3,34 @@
 # DRAGAN RULES - P2408503 - Development Project
 #-----------------------------------------------
 
-alert tcp $HOME_NET 21 -> $EXTERNAL_NET any (msg:"SCAN Potential FTP Brute-Force attempt"; flow:from_server,established; content:"530 "; pcre:"/530\s+(Login|User|Failed|Not)/smi"; sid:1000003; rev:10;)
-alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:”FTP connection attempt”; sid:10001; rev:1;)
+
+#------#
+# PING #
+#------# 
+
 alert icmp any any -> $HOME_NET any (msg:"ICMP test"; sid:10000001; rev:1;)
 alert icmp $EXTERNAL_NET any -> $HOME_NET any (msg:"Pinged"; icode:0; itype:8; sid:10000003; rev:1;)
-alert tcp $EXTERNAL_NET any -> $HOME_NET 22 (msg:"INDICATOR-SCAN SSH brute force login attempt"; flow:to_server,established; content:"SSH-"; depth:4; detection_filter:track by_src, count 5, seconds 60; metadata:service ssh; classtype:misc-activity; sid:10000007; rev:5;)
+
+#---------------------------------#
+# NMAP WITHOUT VULN and WITH VULN #
+#---------------------------------# 
+
 alert tcp any any -> $HOME_NET any (msg: "SYN packet"; flags: S; sid:1000013; rev: 1;)
+alert tcp $HOME_NET 21 -> $EXTERNAL_NET any (msg:"SCAN Potential FTP Brute-Force attempt"; flow:from_server,established; content:"530 "; pcre:"/530\s+(Login|User|Failed|Not)/smi"; sid:1000003; rev:10;)
 alert tcp any any -> $HOME_NET 22 (msg: "NMAP TCP Scan";sid:1000012; rev:2;)
-alert tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (msg:"POLICY-OTHER Adobe ColdFusion admin interface access attempt"; flow:to_server,established; content:"/CFIDE/administrator"; fast_pattern:only; http_uri; metadata:policy balanced-ips drop, policy connectivity-ips drop, policy max-detect-ips drop, policy security-ips drop, service http; reference:bugtraq,57330; reference:cve,2013-0632; reference:url,www.adobe.com/support/security/advisories/apsa13-01.html; classtype:policy-violation; sid:25975; rev:3;)
-alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:"FTP command overflow attempt"; flow:to_server,established,no_stream; dsize:>100; reference:bugtraq,4638; reference:cve,2002-0606; classtype:protocol-command-decode; sid:1748; rev:8;)
-alert udp any any -> $HOME_NET any (msg:"NMAP UPD Scan"; sid: 100000019; rev: 1;)
+
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:”FTP connection attempt”; sid:10001; rev:1;)
 alert tcp any any -> any 80 (content:"HTTP"; msg:"http test"; sid:10000100; rev:1;)
 alert tcp any any -> any 443 (content:"HTTPS"; msg:"https test"; sid:10000100; rev:1;)
 alert tcp any any -> $HOME_NET any (msg:"SMB Possible Echo Request (443)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024220; rev:1;)
 alert tcp any any -> $HOME_NET 139 (msg:"SMB Possible Echo Request (139)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024221; rev:1;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (msg:"POLICY-OTHER Adobe ColdFusion admin interface access attempt"; flow:to_server,established; content:"/CFIDE/administrator"; fast_pattern:only; http_uri; metadata:policy balanced-ips drop, policy connectivity-ips drop, policy max-detect-ips drop, policy security-ips drop, service http; reference:bugtraq,57330; reference:cve,2013-0632; reference:url,www.adobe.com/support/security/advisories/apsa13-01.html; classtype:policy-violation; sid:25975; rev:3;)
+alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:"FTP command overflow attempt"; flow:to_server,established,no_stream; dsize:>100; reference:bugtraq,4638; reference:cve,2002-0606; classtype:protocol-command-decode; sid:1748; rev:8;)
+alert udp any any -> $HOME_NET any (msg:"NMAP UPD Scan"; sid: 100000019; rev: 1;)
+
+#---------------------------------#
+# SSH BRUTE FORCE LOGIN ATTEMPT   #
+#---------------------------------# 
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 22 (msg:"INDICATOR-SCAN SSH brute force login attempt"; flow:to_server,established; content:"SSH-"; depth:4; detection_filter:track by_src, count 5, seconds 60; metadata:service ssh; classtype:misc-activity; sid:10000007; rev:5;)
