@@ -22,7 +22,7 @@ alert tcp any any -> $HOME_NET 22 (msg: "NMAP TCP Scan";sid:1000012; rev:2;)
 
 alert tcp $EXTERNAL_NET any -> $HOME_NET 21 (msg:”FTP connection attempt”; sid:10001; rev:1;)
 alert tcp any any -> any 80 (content:"HTTP"; msg:"http test"; sid:10000100; rev:1;)
-alert tcp any any -> any 443 (content:"HTTPS"; msg:"https test"; sid:10000100; rev:1;)
+alert tcp any any -> any 443 (content:"HTTPS"; msg:"https test"; sid:10000101; rev:1;)
 alert tcp any any -> $HOME_NET any (msg:"SMB Possible Echo Request (443)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024220; rev:1;)
 alert tcp any any -> $HOME_NET 139 (msg:"SMB Possible Echo Request (139)"; flow:to_server,established; content:"|FF|SMB|72 00 00 00 00|"; sid:2024221; rev:1;)
 alert tcp $EXTERNAL_NET any -> $HOME_NET $HTTP_PORTS (msg:"POLICY-OTHER Adobe ColdFusion admin interface access attempt"; flow:to_server,established; content:"/CFIDE/administrator"; fast_pattern:only; http_uri; metadata:policy balanced-ips drop, policy connectivity-ips drop, policy max-detect-ips drop, policy security-ips drop, service http; reference:bugtraq,57330; reference:cve,2013-0632; reference:url,www.adobe.com/support/security/advisories/apsa13-01.html; classtype:policy-violation; sid:25975; rev:3;)
