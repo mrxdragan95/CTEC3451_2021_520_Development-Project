@@ -7,4 +7,8 @@ msa2.py - new
 
 msa.py - old
 
+  - vulscan (folder) *vulnerability*
+  - password.txt (Brute Force)
+
 mysnort.rules - P2408503.rules
+
