@@ -3,9 +3,9 @@ Signature-based Intrusion Detection Systems rules creation
 
 Detection.py - new
 
-msa2.py - new
+msa2.py - new (2 + 2)
 
-msa.py - old
+msa.py - old (1 + 2 + 3 + 4)
 
   - vulscan (folder) *vulnerability*
   - password.txt (Brute Force)
